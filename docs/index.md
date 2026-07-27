@@ -9,7 +9,7 @@ icon: lucide/drill
 
 ## Recent Projects
 
-> Play [`Meshi Mania`](../meshi_mania/index.html) - Made in about 96hs during the 2026 gmtk game jam.
+> Play [`Meshi Mania`](../meshi_mania/index.html) - Made in about 96hs during the 2026 [GMTK game jam](https://itch.io/jam/gmtk-jam-2026).
 
 <!-- ## Task Lists -->
 <!---->
