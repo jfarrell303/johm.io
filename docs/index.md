@@ -1,15 +1,16 @@
 ---
-icon: lucide/drill
+icon: lucide/home
 ---
 
 <!-- [Meshi Mania](../meshi_mania/index.html) -->
-<!-- <iframe src="../meshi_mania/index.html" width="512" height="512" style="border:none; overflow:hidden;" scrolling="no"></iframe> -->
 
-# Graphics, gmaes, bits, pixels, oh my!
+# Graphics, bits, pixels, oh my!
 
 ## Recent Projects
 
-> Play [`Meshi Mania`](../meshi_mania/index.html) - Made in about 96hs during the 2026 [GMTK game jam](https://itch.io/jam/gmtk-jam-2026).
+<!-- > Play [`Meshi Mania`](../meshi_mania/index.html) - A game made in about 96hs during the 2026 [GMTK game jam](https://itch.io/jam/gmtk-jam-2026). -->
+
+> Play [`Meshi Mania`](meshi.md) - Made in about 96hs during the 2026 [GMTK game jam](https://itch.io/jam/gmtk-jam-2026).
 
 <!-- ## Task Lists -->
 <!---->

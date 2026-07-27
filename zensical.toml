@@ -17,7 +17,7 @@ site_name = "johm.io"
 # meaningful description of the site content for use by search engines.
 #
 # Read more: https://zensical.org/docs/setup/basics/#site_description
-site_description = "Graphics, bits, pixels, oh my!."
+site_description = "johm.io"
 
 # The site_author attribute. This is used in the HTML head element.
 #
@@ -63,8 +63,6 @@ extra_css = ["stylesheets/extra.css"]
 #
 # Read more: https://zensical.org/docs/customization/#additional-javascript
 #extra_javascript = ["javascripts/extra.js"]
-extra_javascript = [ "projects/meshi/meshi.js"]
-
 
 # ----------------------------------------------------------------------------
 # Section for configuring theme options
@@ -91,7 +89,8 @@ custom_dir = "overrides"
 # - https://zensical.org/docs/setup/logo-and-icons/#favicon
 # - https://developer.mozilla.org/en-US/docs/Glossary/Favicon
 #
-#favicon = "images/favicon.png"
+# favicon = "images/favicon.png"
+favicon = "lucide/smile"
 
 # Zensical supports more than 60 different languages. This means that the
 # labels and tooltips that Zensical's templates produce are translated.
