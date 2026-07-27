@@ -10,7 +10,7 @@ icon: lucide/home
 
 <!-- > Play [`Meshi Mania`](../meshi_mania/index.html) - A game made in about 96hs during the 2026 [GMTK game jam](https://itch.io/jam/gmtk-jam-2026). -->
 
-> Play [`Meshi Mania`](meshi.md) - Made in about 96hs during the 2026 [GMTK game jam](https://itch.io/jam/gmtk-jam-2026).
+> Play [`Meshi Mania`](meshi.md) - A game made in about 96hs during the 2026 [GMTK game jam](https://itch.io/jam/gmtk-jam-2026).
 
 <!-- ## Task Lists -->
 <!---->
