@@ -135,12 +135,13 @@ features = [
     # This feature turns on a button in code blocks that allow users to
     # copy the content to their clipboard without first selecting it.
     # https://zensical.org/docs/authoring/code-blocks/#code-copy-button
-    "content.code.copy",
+# TODO: Colors looked like ass
+    # "content.code.copy",
 
     # Code blocks can include a button to allow for the selection of line
     # ranges by the user.
     # https://zensical.org/docs/authoring/code-blocks/#code-selection-button
-    "content.code.select",
+    # "content.code.select",
 
     # Zensical can render footnotes as inline tooltips, so the user can read
     # the footnote without leaving the context of the document.
@@ -251,7 +252,7 @@ features = [
 # option in the "theme" subsection. The logo must be a relative path to a file
 # in your "docs_dir", e.g., to use `docs/assets/logo.png` you would set:
 # ----------------------------------------------------------------------------
-#logo = "assets/logo.png"
+logo = "assets/shape.png"
 
 # ----------------------------------------------------------------------------
 # If you don't have a dedicated project logo, you can use a built-in icon from
@@ -263,7 +264,7 @@ features = [
 # - https://github.com/zensical/ui/tree/master/dist/.icons
 # ----------------------------------------------------------------------------
 [project.theme.icon]
-#logo = "lucide/smile"
+logo = "lucide/smile"
 
 # ----------------------------------------------------------------------------
 # In the "font" subsection you can configure the fonts used. By default, fonts
@@ -272,7 +273,7 @@ features = [
 # a monospaced font used in code blocks.
 # ----------------------------------------------------------------------------
 [project.theme.font]
-text = "Inter"
+text = "Segoui"
 code = "Jetbrains Mono"
 
 # ----------------------------------------------------------------------------
@@ -285,22 +286,23 @@ code = "Jetbrains Mono"
 # - https://zensical.org/docs/setup/colors/
 # ----------------------------------------------------------------------------
 # Palette toggle for automatic mode
-[[project.theme.palette]]
-media = "(prefers-color-scheme)"
-toggle.icon = "lucide/sun-moon"
-toggle.name = "Switch to light mode"
+# [[project.theme.palette]]
+# media = "(prefers-color-scheme)"
+# toggle.icon = "lucide/sun-moon"
+# toggle.name = "Switch to light mode"
 
 # Palette toggle for light mode
 [[project.theme.palette]]
 media = "(prefers-color-scheme: light)"
-scheme = "light"
+scheme = "jsf_light"
 toggle.icon = "lucide/sun"
 toggle.name = "Switch to dark mode"
 
 # Palette toggle for dark mode
 [[project.theme.palette]]
-media = "(prefers-color-scheme: dark)"
-scheme = "slate"
+media = "(prefers-color-scheme: light)"
+# scheme = "slate"
+scheme = "jsf_theme"
 toggle.icon = "lucide/moon"
 toggle.name = "Switch to system preference"
 # primary = "teal"
@@ -347,6 +349,7 @@ emoji_index = "zensical.extensions.emoji.twemoji"
 anchor_linenums = true
 line_spans = "__span"
 pygments_lang_class = true
+
 [project.markdown_extensions.pymdownx.inlinehilite]
 [project.markdown_extensions.pymdownx.keys]
 [project.markdown_extensions.pymdownx.magiclink]
