@@ -24,18 +24,50 @@ robots: noindex, nofollow
 > Play [`Meshi Mania`](meshi.md) - A game made in about 96hs during the 2026 [GMTK game jam](https://itch.io/jam/gmtk-jam-2026).
 
 ----
-``` cpp linenums="1" title="example.cpp"
-// What it do
-struct {
-    uint32_t testing;
+``` cpp linenums="1" title="thing_props.h"
+enum ThingProp {
+   ThingProp_Nil          = (1<<0),
+   ThingProp_Visible      = (1<<1),
+   ThingProp_Sleeping     = (1<<2),
+   ThingProp_Damages      = (1<<3),
+   ThingProp_Damagable    = (1<<4),
+   ThingProp_Movement     = (1<<5),
+   ThingProp_FollowParent = (1<<6),
+   ThingProp_Explosive    = (1<<7),
+   ThingProp_Projectile   = (1<<8),
+   ThingProp_Collectible  = (1<<9),
+   ThingProp_SeeksPlayer  = (1<<10),
+   ThingProp_TimedLife    = (1<<11),
+   ThingProp_MeleeAttack  = (1<<12),
+   ThingProp_RangedAttack = (1<<13),
+   ThingProp_Animated     = (1<<14),
+   ThingProp_Breakable    = (1<<15),
+   ThingProp_HasTooltip   = (1<<16),
+   ThingProp_Enemy        = (ThingProp_SeeksPlayer  | ThingProp_Damagable | ThingProp_Movement),
+   ThingProp_MeleeEnemy   = (ThingProp_MeleeAttack  | ThingProp_Enemy),
+   ThingProp_RangedEnemy  = (ThingProp_RangedAttack | ThingProp_Enemy),
 };
 
-void
-world_tick(void)
-{
-    for (int i = 0; i < 10; ++i) {
+```
 
-    }
+``` cpp linenums="1" title="gpu_buffer_example.cpp"
+// Testing123
+static GPU_BufferHandle
+gpu_buffer_alloc()
+{
+   GPU_BufferHandle handle = gpu->buffers.add();
+
+   if (handle.is_invalid()) {
+      return handle;
+   }
+
+   return handle;
+}
+
+static GPU_Buffer *
+gpu_buffer_from_handle(GPU_BufferHandle handle)
+{
+   return gpu->buffers.get(handle);
 }
 ```
 
