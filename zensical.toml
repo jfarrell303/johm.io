@@ -286,10 +286,11 @@ code = "Jetbrains Mono"
 # - https://zensical.org/docs/setup/colors/
 # ----------------------------------------------------------------------------
 # Palette toggle for automatic mode
-# [[project.theme.palette]]
-# media = "(prefers-color-scheme)"
-# toggle.icon = "lucide/sun-moon"
-# toggle.name = "Switch to light mode"
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "jsf_theme"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to light mode"
 
 # Palette toggle for light mode
 [[project.theme.palette]]
@@ -303,7 +304,7 @@ toggle.name = "Switch to dark mode"
 media = "(prefers-color-scheme: light)"
 # scheme = "slate"
 scheme = "jsf_theme"
-toggle.icon = "lucide/moon"
+toggle.icon = "lucide/sun-moon"
 toggle.name = "Switch to system preference"
 # primary = "teal"
 # accent = "amber"
