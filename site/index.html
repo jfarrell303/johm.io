@@ -471,6 +471,7 @@
 <blockquote>
 <p>Play <a href="meshi/"><code>Meshi Mania</code></a> - A game made in about 96hs during the 2026 <a href="https://itch.io/jam/gmtk-jam-2026">GMTK game jam</a>.</p>
 </blockquote>
+<hr />
 <div class="language-cpp highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">example.cpp</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
@@ -495,6 +496,12 @@
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
+<hr />
+<div style="border: 1px solid var(--jsf-accent); border-radius: 8px; padding: 1rem; background: var(--md-code-bg-color);">
+  <canvas id="webgpuCanvas" width="600" height="400" style="width: 100%; height: auto; display: block; border-radius: 4px;"></canvas>
+  <p id="webgpuStatus" style="font-size: 0.85rem; margin-top: 0.5rem; color: var(--md-default-fg-color--lighter);">Initializing WebGPU...</p>
+</div>
+
 <!-- !!! note "" -->
 <!--     Hey there -->
 <!-- The reason the copyright footer strip is still showing a darker background (like #19171a from --md-footer-bg-color) is because Material for MkDocs splits the footer into two containers: .md-footer (the main navigation row with next/previous page buttons) and .md-footer-meta (the bottom copyright strip). -->
@@ -633,8 +640,129 @@
       <script id="__config" type="application/json">{"annotate":null,"base":".","features":["announce.dismiss","content.code.annotate","content.footnote.tooltips","content.tabs.link","content.tooltips","header.autohide","navigation.footer","navigation.indexes","navigation.instant","navigation.instant.prefetch","navigation.path","navigation.prune","navigation.sections","navigation.tabs","navigation.tabs.sticky","navigation.top","navigation.tracking","search.highlight"],"redirect":null,"search":"./assets/javascripts/workers/search.719e0d91.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
+  
       <script src="./assets/javascripts/bundle.d31f0ffa.min.js"></script>
       
     
+  <script>
+    document$.subscribe(async function() {
+      const canvas = document.getElementById("webgpuCanvas");
+      const statusEl = document.getElementById("webgpuStatus");
+
+      if (!canvas) return;
+
+      // jsf: Checking browser compat
+      if (!navigator.gpu) {
+        statusEl.textContent = "WebGPU not supported! If you are in Firefox, you can enable it by setting dom.webgpu.enabled is true about:config!";
+        statusEl.style.color = "#fd6883";
+        return;
+      }
+
+      try {
+
+        const adapter = await navigator.gpu.requestAdapter();
+        if (!adapter) throw new Error("No GPU found.");
+        const device = await adapter.requestDevice();
+
+        const context = canvas.getContext("webgpu");
+        const format = navigator.gpu.getPreferredCanvasFormat();
+
+        context.configure({
+          device: device,
+          format: format,
+          alphaMode: "premultiplied" // Lol its so easy
+        });
+
+        const shaderModule = device.createShaderModule({
+          code: `
+            struct VertexOut {
+              @builtin(position) pos: vec4f,
+              @location(0) color: vec4f
+            };
+
+            @vertex
+            fn vs_main(@builtin(vertex_index) vertexIndex: u32) -> VertexOut {
+              var pos = array<vec2f, 3>(
+                vec2f( 0.0,  0.5),
+                vec2f(-0.5, -0.5),
+                vec2f( 0.5, -0.5)
+              );
+
+              var colors = array<vec3f, 3>(
+                vec3f(0.0, 0.0, 1.0),
+                vec3f(0.0, 1.0, 0.0),
+                vec3f(1.0, 0.0, 0.0)
+              );
+
+              var output: VertexOut;
+              output.pos = vec4f(pos[vertexIndex], 0.0, 1.0);
+              output.color = vec4f(colors[vertexIndex], 1.0);
+              return output;
+            }
+
+            @fragment
+            fn fs_main(in: VertexOut) -> @location(0) vec4f {
+              return in.color;
+            }
+          `
+        });
+
+
+        const pipeline = device.createRenderPipeline({
+          layout: 'auto',
+          vertex: {
+            module: shaderModule,
+            entryPoint: 'vs_main'
+          },
+          fragment: {
+            module: shaderModule,
+            entryPoint: 'fs_main',
+            targets: [{ format: format }]
+          },
+          primitive: {
+            topology: 'triangle-list'
+          }
+        });
+
+        statusEl.textContent = "Hello, triangle.";
+        // Check current theme scheme
+        const currentScheme = document.body.getAttribute("data-md-color-scheme") ||
+                              document.documentElement.getAttribute("data-md-color-scheme");
+
+        if (currentScheme === "jsf_light") {
+          statusEl.style.color = "#232124";
+        } else {
+          statusEl.style.color = "#f7f5f9";
+        }
+
+        function render() {
+          const commandEncoder = device.createCommandEncoder();
+          const textureView = context.getCurrentTexture().createView();
+
+          const renderPass = commandEncoder.beginRenderPass({
+            colorAttachments: [{
+              view: textureView,
+              clearValue: { r: 0.13, g: 0.12, b: 0.14, a: 0.25 }, // Matches #232124
+              loadOp: 'clear',
+              storeOp: 'store'
+            }]
+          });
+
+          renderPass.setPipeline(pipeline);
+          renderPass.draw(3, 1, 0, 0);
+          renderPass.end();
+
+          device.queue.submit([commandEncoder.finish()]);
+        }
+
+        render();
+
+      } catch (err) {
+        statusEl.textContent = "WebGPU error: " + err.message;
+        statusEl.style.color = "#fd6883";
+      }
+    });
+  </script>
+
   </body>
 </html>

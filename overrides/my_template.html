@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    document$.subscribe(async function() {
+      const canvas = document.getElementById("webgpuCanvas");
+      const statusEl = document.getElementById("webgpuStatus");
+
+      if (!canvas) return;
+
+      // jsf: Checking browser compat
+      if (!navigator.gpu) {
+        statusEl.textContent = "WebGPU not supported! If you are in Firefox, you can enable it by setting dom.webgpu.enabled is true about:config!";
+        statusEl.style.color = "#fd6883";
+        return;
+      }
+
+      try {
+
+        const adapter = await navigator.gpu.requestAdapter();
+        if (!adapter) throw new Error("No GPU found.");
+        const device = await adapter.requestDevice();
+
+        const context = canvas.getContext("webgpu");
+        const format = navigator.gpu.getPreferredCanvasFormat();
+
+        context.configure({
+          device: device,
+          format: format,
+          alphaMode: "premultiplied" // Lol its so easy
+        });
+
+        const shaderModule = device.createShaderModule({
+          code: `
+            struct VertexOut {
+              @builtin(position) pos: vec4f,
+              @location(0) color: vec4f
+            };
+
+            @vertex
+            fn vs_main(@builtin(vertex_index) vertexIndex: u32) -> VertexOut {
+              var pos = array<vec2f, 3>(
+                vec2f( 0.0,  0.5),
+                vec2f(-0.5, -0.5),
+                vec2f( 0.5, -0.5)
+              );
+
+              var colors = array<vec3f, 3>(
+                vec3f(0.0, 0.0, 1.0),
+                vec3f(0.0, 1.0, 0.0),
+                vec3f(1.0, 0.0, 0.0)
+              );
+
+              var output: VertexOut;
+              output.pos = vec4f(pos[vertexIndex], 0.0, 1.0);
+              output.color = vec4f(colors[vertexIndex], 1.0);
+              return output;
+            }
+
+            @fragment
+            fn fs_main(in: VertexOut) -> @location(0) vec4f {
+              return in.color;
+            }
+          `
+        });
+
+
+        const pipeline = device.createRenderPipeline({
+          layout: 'auto',
+          vertex: {
+            module: shaderModule,
+            entryPoint: 'vs_main'
+          },
+          fragment: {
+            module: shaderModule,
+            entryPoint: 'fs_main',
+            targets: [{ format: format }]
+          },
+          primitive: {
+            topology: 'triangle-list'
+          }
+        });
+
+        statusEl.textContent = "Hello, triangle.";
+        // Check current theme scheme
+        const currentScheme = document.body.getAttribute("data-md-color-scheme") ||
+                              document.documentElement.getAttribute("data-md-color-scheme");
+
+        if (currentScheme === "jsf_light") {
+          statusEl.style.color = "#232124";
+        } else {
+          statusEl.style.color = "#f7f5f9";
+        }
+
+        function render() {
+          const commandEncoder = device.createCommandEncoder();
+          const textureView = context.getCurrentTexture().createView();
+
+          const renderPass = commandEncoder.beginRenderPass({
+            colorAttachments: [{
+              view: textureView,
+              clearValue: { r: 0.13, g: 0.12, b: 0.14, a: 0.25 }, // Matches #232124
+              loadOp: 'clear',
+              storeOp: 'store'
+            }]
+          });
+
+          renderPass.setPipeline(pipeline);
+          renderPass.draw(3, 1, 0, 0);
+          renderPass.end();
+
+          device.queue.submit([commandEncoder.finish()]);
+        }
+
+        render();
+
+      } catch (err) {
+        statusEl.textContent = "WebGPU error: " + err.message;
+        statusEl.style.color = "#fd6883";
+      }
+    });
+  </script>
+{% endblock %}

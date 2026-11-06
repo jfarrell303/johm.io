@@ -19,6 +19,14 @@
   --jsf-light-gray: rgba(215, 205, 225, 0.75);
   --jsf-accent: #d499ed;
 }
+
+[data-md-color-scheme="jsf_light"] .md-typeset hr {
+  border-bottom-color: rgba(0, 0, 0, 0.15) !important;
+}
+[data-md-color-scheme="jsf_theme"] .md-typeset hr {
+  border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+}
+
 [data-md-color-scheme="jsf_theme"] .md-typeset .admonition.info .admonition-title::before,
 [data-md-color-scheme="jsf_theme"] .md-typeset details.info summary::before {
   background-color: var(--jsf-accent) !important;
@@ -29,6 +37,12 @@
 [data-md-color-scheme="jsf_theme"] .md-nav--secondary,
 [data-md-color-scheme="jsf_theme"] .md-nav {
   background-color: rgba(54, 50, 58, 0.85) !important;
+  color: #ffffff !important;
+}
+[data-md-color-scheme="jsf_theme"] .md-code__header,
+[data-md-color-scheme="jsf_theme"] .filename,
+[data-md-color-scheme="jsf_theme"] .codehilite title,
+[data-md-color-scheme="jsf_theme"] .highlighttable .filename {
   color: #ffffff !important;
 }
 
